@@ -2,10 +2,18 @@ const mongoose = require('mongoose')
 
 mongoose.set('strictQuery', true)
 
-let uri = process.env.uriDB
+let uri = () => {
+  if (process.env.NODE_ENV === 'development') {
+    let uri = process.env.uriDEV
+    return uri
+  } else if (process.env.NODE_ENV === 'production') {
+    let uri = process.env.uriPROD
+    return uri
+  }
+}
 
 mongoose.Promise = global.Promise
-mongoose.connect(uri)
+mongoose.connect(uri())
 
 mongoose.connection.on('connected', () => {
   console.log(`Mongoose connection open`)

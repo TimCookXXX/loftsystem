@@ -43,7 +43,9 @@
     "start:frontend": "react-scripts start",
     "build:frontend": "react-scripts build",
     "test:frontend": "react-scripts test",
-    "eject:frontend": "react-scripts eject"
+    "eject:frontend": "react-scripts eject",
+    "start:dev": "cross-env NODE_ENV=development nodemon ./server/server.js",
+    "start:prod": "cross-env NODE_ENV=production nodemon ./server/server.js"
   },
   "eslintConfig": {
     "extends": "react-app"

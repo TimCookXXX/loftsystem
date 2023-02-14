@@ -7,7 +7,7 @@ const helper = require('../helpers/serialize')
 const formidable = require('formidable')
 const fs = require('fs')
 const path = require('path')
-// const Jimp = require('jimp')
+const Jimp = require('jimp')
 
 const auth = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user, info) => {
@@ -120,8 +120,11 @@ router.patch('/profile', auth, async (req, res) => {
       return res.status(409).json({ message: valid.status })
     }
     if (files.avatar) {
-      const dirImage = path.join("./", files.avatar.newFilename)
-      console.log(files.avatar.newFilename)
+      const pathToImage = path.join(process.cwd(), "upload", files.avatar.newFilename)
+      const image = await Jimp.read(pathToImage)
+      await image.resize(150, 150)
+      await image.writeAsync(path.join(process.cwd(), "upload", files.avatar.newFilename))
+      const dirImage = path.join('/', files.avatar.newFilename)
       fields.image = dirImage
     } 
     const newUser = await db.updateUserById(user._id, fields)
